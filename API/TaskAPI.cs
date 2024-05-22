@@ -6,6 +6,15 @@ namespace TaskMaster.API
     {
         public static void Map(WebApplication app)
         {
+
+            // Create a Task
+            app.MapPost("/api/task", (TaskMasterDbContext db, TaskMaster.Models.Task newTask) =>
+            {
+                db.Tasks.Add(newTask);
+                db.SaveChanges();
+                return Results.Created($"/api/task/{newTask.Id}", newTask);
+            });
+
             // Get All Tasks
             app.MapGet("/api/tasks", (TaskMasterDbContext db) =>
             {
