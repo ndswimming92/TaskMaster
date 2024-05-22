@@ -5,7 +5,15 @@ namespace TaskMaster.API
     public class CategoryAPI
     {
         public static void Map(WebApplication app)
-        {  
+        {
+            // Create a Category
+            app.MapPost("/api/category", (TaskMasterDbContext db, Category newCategory) =>
+            {
+                db.Categories.Add(newCategory);
+                db.SaveChanges();
+                return Results.Created($"/api/category/{newCategory.Id}", newCategory);
+            });
+
             // Get All Categories
             app.MapGet("/api/category", (TaskMasterDbContext db) =>
             {
