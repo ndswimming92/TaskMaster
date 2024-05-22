@@ -54,6 +54,21 @@ namespace TaskMaster.API
                 db.SaveChanges();
                 return Results.NoContent();
             });
+
+            // Delete a Task
+            app.MapDelete("api/task/{id}", (TaskMasterDbContext db, int id) =>
+            {
+                TaskMaster.Models.Task taskToDelete = db.Tasks.FirstOrDefault(task => task.Id == id);
+                if (taskToDelete == null)
+                {
+                    return Results.NotFound();
+                }
+                db.Tasks.Remove(taskToDelete);
+                db.SaveChanges();
+
+                var tasks = db.Tasks.OrderBy(task => task.Id).ToList();
+                return Results.Ok(db.Tasks);
+            });
         }
     }
 }
