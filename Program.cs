@@ -34,6 +34,7 @@ if (app.Environment.IsDevelopment())
 
 CategoryAPI.Map(app);
 TaskAPI.Map(app);
+UserAPI.Map(app);
 
 
 app.UseHttpsRedirection();

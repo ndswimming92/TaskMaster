@@ -6,6 +6,7 @@ namespace TaskMaster.API
     {
         public static void Map(WebApplication app)
         {
+
             // Create a Category
             app.MapPost("/api/category", (TaskMasterDbContext db, Category newCategory) =>
             {
