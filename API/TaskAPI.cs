@@ -33,6 +33,27 @@ namespace TaskMaster.API
 
                 return Results.Ok(task);
             });
+
+            // Update a Task
+            app.MapPut("/api/task/{id}", (TaskMasterDbContext db, int id, TaskMaster.Models.Task task) =>
+            {
+                TaskMaster.Models.Task taskToUpdate = db.Tasks.SingleOrDefault(task => task.Id == id);
+
+                if (taskToUpdate == null)
+                {
+                    return Results.NotFound("Task was not found.");
+                }
+
+                taskToUpdate.Id = task.Id;
+                taskToUpdate.Title = task.Title;
+                taskToUpdate.Description = task.Description;
+                taskToUpdate.DueDate = task.DueDate;
+                taskToUpdate.Priority = task.Priority;
+                taskToUpdate.UserId = task.UserId;
+              
+                db.SaveChanges();
+                return Results.NoContent();
+            });
         }
     }
 }
