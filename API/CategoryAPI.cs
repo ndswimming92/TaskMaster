@@ -12,7 +12,7 @@ namespace TaskMaster.API
                 return db.Categories.ToList();
             });
 
-            // Get Single Category
+            // Get Single Category by Id
             app.MapGet("/api/category/{id}", (TaskMasterDbContext db, int id) =>
             {
                 var categoryId = db.Categories.FirstOrDefault(c => c.Id == id);
