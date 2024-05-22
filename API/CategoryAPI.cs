@@ -15,14 +15,14 @@ namespace TaskMaster.API
             // Get Single Category
             app.MapGet("/api/category/{id}", (TaskMasterDbContext db, int id) =>
             {
-                var itemID = db.Categories.FirstOrDefault(c => c.Id == id);
+                var categoryId = db.Categories.FirstOrDefault(c => c.Id == id);
 
-                if (itemID == null)
+                if (categoryId == null)
                 {
                     return Results.NotFound("Category Not Found.");
                 }
 
-                return Results.Ok(itemID);
+                return Results.Ok(categoryId);
             });
 
         }
