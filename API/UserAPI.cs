@@ -1,4 +1,5 @@
-﻿using TaskMaster.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using TaskMaster.Models;
 
 namespace TaskMaster.API
 {
@@ -7,6 +8,7 @@ namespace TaskMaster.API
         public static void Map(WebApplication app)
         {
             // Create a User
+
             app.MapPost("api/user", (TaskMasterDbContext db, User users) =>
             {
                 db.Users.Add(users);
@@ -34,6 +36,7 @@ namespace TaskMaster.API
             });
 
             // Get User by Id
+
             app.MapGet("api/user/{id}", (TaskMasterDbContext db, int id) =>
             {
                 var userDetails = db.Users
@@ -46,6 +49,20 @@ namespace TaskMaster.API
                 return Results.Ok(userDetails);
             });
 
+            // Delete a User
+
+            app.MapDelete("api/user/{id}", (TaskMasterDbContext db, int id) =>
+            {
+                var userToDelete = db.Users.Include(u => u.Tasks).FirstOrDefault(user => user.Id == id);
+                if (userToDelete == null)
+                {
+                    return Results.NotFound("No User found with that Id.");
+                }
+
+                db.Users.Remove(userToDelete);
+                db.SaveChanges();
+                return Results.Ok(db.Users);
+            });
         }
 
     }
