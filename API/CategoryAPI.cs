@@ -15,7 +15,7 @@ namespace TaskMaster.API
             });
 
             // Get All Categories
-            app.MapGet("/api/category", (TaskMasterDbContext db) =>
+            app.MapGet("/api/categories", (TaskMasterDbContext db) =>
             {
                 return db.Categories.ToList();
             });
@@ -31,6 +31,24 @@ namespace TaskMaster.API
                 }
 
                 return Results.Ok(categoryId);
+            });
+
+            // Update a Category
+            app.MapPut("/api/category/{id}", (TaskMasterDbContext db, int id, Category category) =>
+            {
+                Category categoryToUpdate = db.Categories.SingleOrDefault(category => category.Id == id);
+
+                if (categoryToUpdate == null)
+                {
+                    return Results.NotFound("Category was not found.");
+                }
+
+                categoryToUpdate.Id = category.Id;
+                categoryToUpdate.Name = category.Name;
+
+                               
+                db.SaveChanges();
+                return Results.Ok(category);
             });
 
         }
