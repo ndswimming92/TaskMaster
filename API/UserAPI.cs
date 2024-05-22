@@ -33,6 +33,19 @@ namespace TaskMaster.API
                 return Results.Ok(users);
             });
 
+            // Get User by Id
+            app.MapGet("api/user/{id}", (TaskMasterDbContext db, int id) =>
+            {
+                var userDetails = db.Users
+                .FirstOrDefault(users => users.Id == id);
+
+                if (userDetails == null)
+                {
+                    return Results.NotFound();
+                }
+                return Results.Ok(userDetails);
+            });
+
         }
 
     }
