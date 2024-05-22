@@ -33,6 +33,7 @@ if (app.Environment.IsDevelopment())
 }
 
 CategoryAPI.Map(app);
+TaskAPI.Map(app);
 
 
 app.UseHttpsRedirection();
