@@ -52,6 +52,21 @@ namespace TaskMaster.API
                 return Results.Ok(category);
             });
 
+            // Delete a Category
+            app.MapDelete("api/category/{id}", (TaskMasterDbContext db, int id) =>
+            {
+                Category categoryToDelete = db.Categories.FirstOrDefault(category => category.Id == id);
+                if (categoryToDelete == null)
+                {
+                    return Results.NotFound();
+                }
+                db.Categories.Remove(categoryToDelete);
+                db.SaveChanges();
+
+                var categories = db.Tasks.OrderBy(category => category.Id).ToList();
+                return Results.Ok(db.Categories);
+            });
+
         }
     }
 }
