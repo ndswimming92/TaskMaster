@@ -2,6 +2,7 @@ using TaskMaster.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Json;
+using TaskMaster.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+CategoryAPI.Map(app);
+
 
 app.UseHttpsRedirection();
 
