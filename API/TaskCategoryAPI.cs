@@ -9,7 +9,7 @@ namespace TaskMaster.API
         {
 
             // Add Category to Task
-            app.MapPut("/api/tasks/{taskId}/categories/{categoryId}", (TaskMasterDbContext db, int taskId, int categoryId) =>
+            app.MapPost("/api/tasks/{taskId}/categories/{categoryId}", (TaskMasterDbContext db, int taskId, int categoryId) =>
             {
                 var task = db.Tasks
                              .Include(t => t.TaskCategories)
@@ -51,6 +51,37 @@ namespace TaskMaster.API
                     {
                         return Results.BadRequest("The task already has this category.");
                     }
+
+                    return Results.Ok(task);
+                }
+                catch (Exception ex)
+                {
+                    return Results.BadRequest($"An error occurred: {ex.Message}");
+                }
+            });
+
+            // Remove Category from Task
+
+            app.MapDelete("/api/tasks/{taskId}/categories/{categoryId}", (TaskMasterDbContext db, int taskId, int categoryId) =>
+            {
+                var taskCategory = db.TaskCategories
+                                     .SingleOrDefault(tc => tc.TaskId == taskId && tc.CategoryId == categoryId);
+
+                if (taskCategory == null)
+                {
+                    return Results.BadRequest("Task category relationship not found.");
+                }
+
+                try
+                {
+                    db.TaskCategories.Remove(taskCategory);
+                    db.SaveChanges();
+
+                    // Reload the task with its categories to include in the response
+                    var task = db.Tasks
+                                 .Include(t => t.TaskCategories)
+                                 .ThenInclude(tc => tc.Category)
+                                 .SingleOrDefault(t => t.Id == taskId);
 
                     return Results.Ok(task);
                 }

@@ -44,7 +44,7 @@ namespace TaskMaster.API
 
                 if (userDetails == null)
                 {
-                    return Results.NotFound();
+                    return Results.NotFound("User not found. Please select a valid ID.");
                 }
                 return Results.Ok(userDetails);
             });
